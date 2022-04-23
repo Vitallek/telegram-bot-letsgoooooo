@@ -88,10 +88,12 @@ func weatherCallback(ctx tele.Context) error {
 	latStr := fmt.Sprintf("%f", lat)
 	lonStr := fmt.Sprintf("%f", lon)
 	log.Print(cityID)
+
 	err = SaveData(int(cityID),city,region,country,1)
 	if err != nil {
 		return err
 	}
+	
 	err = ctx.Send(misc.GetWeather(latStr, lonStr, fullCityName))
 	if err != nil {
 		return err

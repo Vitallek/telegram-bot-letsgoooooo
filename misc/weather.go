@@ -22,7 +22,7 @@ func GetWeather(lat string, lon string, cityName string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	println(string(responseData))
+	//println(string(responseData))
 
 	weatherDesc, err := jsonparser.GetString(responseData, "current", "weather", "[0]", "description")
 	temperature, err := jsonparser.GetFloat(responseData, "current", "temp")
