@@ -35,14 +35,12 @@ func draw(c tele.Context) error{
 		},
 		Width:    512,
 		Height:   512,
-		BarWidth: 50,
+		//BarWidth: 50,
 		XAxis:    chart.StyleShow(),
 		YAxis: chart.YAxis{
 			Style:          chart.StyleShow(),
-			//ValueFormatter: chart.IntValueFormatter,
 			Range: &chart.ContinuousRange{
 				Min: 0,
-				Max: values[0].Value,
 			},
 		},
 		Bars: values,
@@ -50,7 +48,9 @@ func draw(c tele.Context) error{
 
 	// Render and send
 	buffer := &bytes.Buffer{}
-	image := response.Render(chart.PNG, buffer)
-	
-	return c.Send(imageToSend)
+	response.Render(chart.PNG, buffer)
+	//a := &tele.Audio{File: tele.FromDisk("file.ogg")}
+	a := &tele.Photo{File: tele.FromReader(buffer)}
+	// Will upload the file from disk and send it to the recipient
+	return c.Send(a)
 }
