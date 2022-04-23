@@ -2,13 +2,12 @@ package misc
 
 import (
 	"fmt"
+	"github.com/buger/jsonparser"
 	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
 	"os"
-
-	"github.com/buger/jsonparser"
 )
 
 func GetWeather(lat string, lon string, cityName string) string {

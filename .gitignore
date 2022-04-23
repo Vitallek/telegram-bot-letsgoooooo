@@ -22,3 +22,5 @@ go.work
 
 .idea/
 .env
+firebase-admin-key.json
+firebase-admin-key.json

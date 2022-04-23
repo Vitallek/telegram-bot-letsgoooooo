@@ -78,6 +78,7 @@ func weatherCallback(ctx tele.Context) error {
 		log.Panic()
 	}
 
+	cityID, _ := jsonparser.GetInt(responseData, "data", "id")
 	lat, _ := jsonparser.GetFloat(responseData, "data", "latitude")
 	lon, _ := jsonparser.GetFloat(responseData, "data", "longitude")
 	city, _ := jsonparser.GetString(responseData, "data", "city")
@@ -86,7 +87,11 @@ func weatherCallback(ctx tele.Context) error {
 	fullCityName := misc.GetFullCityName(city, region, country, ", ")
 	latStr := fmt.Sprintf("%f", lat)
 	lonStr := fmt.Sprintf("%f", lon)
-
+	log.Print(cityID)
+	err = SaveData(int(cityID),city,region,country,1)
+	if err != nil {
+		return err
+	}
 	err = ctx.Send(misc.GetWeather(latStr, lonStr, fullCityName))
 	if err != nil {
 		return err
