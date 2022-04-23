@@ -92,7 +92,7 @@ func GetData() []db.QueryNode {
 	// As an admin, the app has access to read and write all data, regradless of Security Rules
 	ref := client.NewRef("/cities/")
 
-	results, err := ref.OrderByChild("queries").GetOrdered(ctx)
+	results, err := ref.OrderByChild("queries").LimitToLast(10).GetOrdered(ctx)
 	if err != nil {
 		log.Fatalln("Error querying database:", err)
 	}

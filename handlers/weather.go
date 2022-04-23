@@ -93,7 +93,7 @@ func weatherCallback(ctx tele.Context) error {
 	if err != nil {
 		return err
 	}
-	
+
 	err = ctx.Send(misc.GetWeather(latStr, lonStr, fullCityName))
 	if err != nil {
 		return err

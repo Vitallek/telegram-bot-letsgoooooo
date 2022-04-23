@@ -11,5 +11,7 @@ func RegisterHandlers(b *tele.Bot) {
 
 	b.Handle("/jt", tikTakToeCommand)
 
+	b.Handle("/jstat", draw)
+
 	b.Handle(tele.OnCallback, callbacksSwitch)
 }
