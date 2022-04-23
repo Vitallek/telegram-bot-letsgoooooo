@@ -36,10 +36,10 @@ func GetWeather(lat string, lon string, cityName string) string {
 		sendTemplate += " в городе " + cityName
 	}
 	sendTemplate += ":\n\nОблачность: " + weatherDesc + "\n" +
-		"Температура: " + fmt.Sprintf("%d", int(math.Round(temperature))) + " °C\n" +
-		"Ощущается как " + fmt.Sprintf("%d", int(math.Round(feelsLike))) + " °C\n" +
+		"Температура: " + fmt.Sprintf("%d", int(math.Round(temperature))) + "°C\n" +
+		"Ощущается как " + fmt.Sprintf("%d", int(math.Round(feelsLike))) + "°C\n" +
 		"Влажность: " + fmt.Sprintf("%d", int(math.Round(humidity))) + "%\n" +
-		"Ветер:" + fmt.Sprintf("%d", int(math.Round(wind))) + " м/c"
+		"Ветер: " + fmt.Sprintf("%d", int(math.Round(wind))) + " м/c"
 
 	return sendTemplate
 }
