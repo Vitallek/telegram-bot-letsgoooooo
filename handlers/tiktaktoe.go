@@ -2,12 +2,14 @@ package handlers
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
-	"tg-weather-bot-go/misc"
 
 	tele "gopkg.in/telebot.v3"
+
+	"tg-weather-bot-go/misc"
 )
 
 func tikTakToeCommand(ctx tele.Context) error {
@@ -25,9 +27,9 @@ func tikTakToeRegCallback(ctx tele.Context) error {
 	}
 
 	kb := &tele.ReplyMarkup{}
-	kbRows := []tele.Row{}
+	var kbRows []tele.Row
 	for i := 0; i < 3; i++ {
-		btnsArray := []tele.Btn{}
+		var btnsArray []tele.Btn
 		for j := 0; j < 3; j++ {
 			iStr := fmt.Sprintf("%d", i)
 			jStr := fmt.Sprintf("%d", j)
@@ -40,7 +42,7 @@ func tikTakToeRegCallback(ctx tele.Context) error {
 
 	err := ctx.Edit("Крестики нолики\nХодит первый игрок", kb)
 	if err != nil {
-		return err
+		log.Panic(err)
 	}
 	return ctx.Respond()
 }
@@ -60,65 +62,57 @@ func tikTakToePlaceMarkCallback(ctx tele.Context) error {
 		field = append(field, callbackDataArray[6+3*i:9+3*i])
 	}
 
-	if currentPlayer == "1" && firstPlayerId != fmt.Sprintf("%d", ctx.Callback().Sender.ID) && os.Getenv("DEBUG") == "False" {
+	callbackSenderId := fmt.Sprintf("%d", ctx.Callback().Sender.ID)
+	if currentPlayer == "1" && firstPlayerId != callbackSenderId && os.Getenv("DEBUG") == "False" {
 		return ctx.Respond()
 	}
-	if currentPlayer == "2" && secondPlayerId != fmt.Sprintf("%d", ctx.Callback().Sender.ID) && os.Getenv("DEBUG") == "False" {
+	if currentPlayer == "2" && secondPlayerId != callbackSenderId && os.Getenv("DEBUG") == "False" {
 		return ctx.Respond()
 	}
 	if field[ii][jj] != "0" {
 		return ctx.Respond()
 	}
-	if currentPlayer == "1" {
-		field[ii][jj] = "1"
-	} else {
-		field[ii][jj] = "2"
-	}
+
+	field[ii][jj] = currentPlayer
 
 	nextPlayer := "2"
 	if currentPlayer == "2" {
 		nextPlayer = "1"
 	}
 
-	message := "Крестики нолики"
-	if nextPlayer == "1" {
-		message += "\nХод первого игрока"
-	} else {
-		message += "\nХод второго игрока"
-	}
-
-	callback_left := fmt.Sprintf("tplay_%s_%s_%s_", firstPlayerId, secondPlayerId, nextPlayer)
-	callback_right := ""
-	for i := 0; i < 3; i++ {
-		for j := 0; j < 3; j++ {
-			callback_right += "_" + field[i][j]
-		}
-	}
+	message := "Крестики нолики\n"
+	var callbackLeft, callbackRight string
 
 	winner := misc.TikTakToeCheckForWin(field)
 	if winner != 0 {
 		message = "Крестики нолики\n"
-		if winner == 1 {
+		callbackLeft = "tdead_"
+		switch winner {
+		case 1:
 			message += "Победил первый игрок"
-			callback_left = "tdead_"
-			callback_right = ""
-		}
-		if winner == 2 {
+		case 2:
 			message += "Победил второй игрок"
-			callback_left = "tdead_"
-			callback_right = ""
-		}
-		if winner == 3 {
+		case 3:
 			message += "Ничья"
-			callback_left = "tdead_"
-			callback_right = ""
+		}
+	} else {
+		if nextPlayer == "1" {
+			message += "Ход первого игрока"
+		} else {
+			message += "Ход второго игрока"
+		}
+		callbackLeft = fmt.Sprintf("tplay_%s_%s_%s_", firstPlayerId, secondPlayerId, nextPlayer)
+		for i := 0; i < 3; i++ {
+			for j := 0; j < 3; j++ {
+				callbackRight += "_" + field[i][j]
+			}
 		}
 	}
 
 	kb := &tele.ReplyMarkup{}
-	kbRows := []tele.Row{}
+	var kbRows []tele.Row
 	for i := 0; i < 3; i++ {
-		btnsArray := []tele.Btn{}
+		var btnsArray []tele.Btn
 		for j := 0; j < 3; j++ {
 			iStr := fmt.Sprintf("%d", i)
 			jStr := fmt.Sprintf("%d", j)
@@ -129,7 +123,7 @@ func tikTakToePlaceMarkCallback(ctx tele.Context) error {
 			if field[i][j] == "2" {
 				currentSymbol = "\u2B55"
 			}
-			callback := fmt.Sprintf("%s%s_%s%s", callback_left, iStr, jStr, callback_right)
+			callback := fmt.Sprintf("%s%s_%s%s", callbackLeft, iStr, jStr, callbackRight)
 			btnsArray = append(btnsArray, kb.Data(currentSymbol, callback))
 		}
 		kbRows = append(kbRows, kb.Row(btnsArray...))
@@ -138,7 +132,7 @@ func tikTakToePlaceMarkCallback(ctx tele.Context) error {
 
 	err := ctx.Edit(message, kb)
 	if err != nil {
-		return err
+		log.Panic(err)
 	}
 	return ctx.Respond()
 }
