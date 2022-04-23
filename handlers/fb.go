@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	firebase "firebase.google.com/go"
+	firebase "firebase.google.com/go/v4"
 	//"github.com/buger/jsonparser"
 	//"fmt"
 	"golang.org/x/net/context"
@@ -12,7 +12,7 @@ import (
 func SaveData(cityID int,city string,region string,country string,queries int) error {
 	ctx := context.Background()
 	conf := &firebase.Config{
-		DatabaseURL: "https://telegramweatherdb-default-rtdb.europe-west1.firebaseio.com",
+		DatabaseURL: "https://telegramweatherdb-default-rtdb.europe-west1.firebasedatabase.app",
 	}
 	// Fetch the service account key JSON file contents
 	opt := option.WithCredentialsFile("firebase-admin-key.json")
