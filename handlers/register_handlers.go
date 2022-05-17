@@ -7,10 +7,7 @@ func RegisterHandlers(b *tele.Bot) {
 	b.Handle("/jh", helpCommand)
 	b.Handle("/jw", weatherCommand)
 	b.Handle(tele.OnLocation, location)
-
 	b.Handle("/jt", tikTakToeCommand)
-
-	b.Handle("/jstat", draw)
-
+	b.Handle("/jstat", drawChart)
 	b.Handle(tele.OnCallback, callbacksSwitch)
 }

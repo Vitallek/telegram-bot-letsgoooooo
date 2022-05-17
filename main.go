@@ -1,18 +1,17 @@
 package main
 
 import (
-	"log"
-	"os"
-	"time"
-
 	"github.com/joho/godotenv"
 	tele "gopkg.in/telebot.v3"
-
+	"log"
+	"os"
 	"tg-weather-bot-go/handlers"
+	"time"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
+	err := godotenv.Load()
+	if err != nil {
 		log.Print("Файл .env отсутствует")
 	}
 

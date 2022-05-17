@@ -7,10 +7,10 @@ func getTikTakToePatterns() [8][3][3]int {
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			patterns[i][i][j] = 1
-			patterns[i + 3][j][i] = 1
+			patterns[i+3][j][i] = 1
 		}
 		patterns[6][i][i] = 1
-		patterns[7][2 - i][i] = 1
+		patterns[7][2-i][i] = 1
 	}
 	return patterns
 }

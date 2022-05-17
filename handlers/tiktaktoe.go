@@ -2,13 +2,11 @@ package handlers
 
 import (
 	"fmt"
+	tele "gopkg.in/telebot.v3"
 	"log"
 	"os"
 	"strconv"
 	"strings"
-
-	tele "gopkg.in/telebot.v3"
-
 	"tg-weather-bot-go/misc"
 )
 
