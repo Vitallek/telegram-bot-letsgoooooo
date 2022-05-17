@@ -2,15 +2,13 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/buger/jsonparser"
+	tele "gopkg.in/telebot.v3"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/buger/jsonparser"
-	tele "gopkg.in/telebot.v3"
-
 	"tg-weather-bot-go/misc"
 )
 
@@ -43,8 +41,8 @@ func weatherCommand(ctx tele.Context) error {
 	}
 
 	kb := &tele.ReplyMarkup{}
-	btnRowArray := []tele.Row{}
-	jsonparser.ArrayEach(responseData, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
+	var btnRowArray []tele.Row
+	_, err = jsonparser.ArrayEach(responseData, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
 		id, _ := jsonparser.GetInt(value, "id")
 		city, _ := jsonparser.GetString(value, "city")
 		region, _ := jsonparser.GetString(value, "region")
@@ -54,6 +52,9 @@ func weatherCommand(ctx tele.Context) error {
 		btnWeather := kb.Data(fullCityName, fmt.Sprintf("w_%d", id))
 		btnRowArray = append(btnRowArray, kb.Row(btnWeather))
 	}, "data")
+	if err != nil {
+		log.Panic(err)
+	}
 	kb.Inline(btnRowArray...)
 
 	return ctx.Send("Найденные города: \n", kb)
@@ -89,7 +90,7 @@ func weatherCallback(ctx tele.Context) error {
 	lonStr := fmt.Sprintf("%f", lon)
 	log.Print(cityID)
 
-	err = SaveData(int(cityID),city,region,country,1)
+	err = misc.SaveData(int(cityID), city, region, country, 1)
 	if err != nil {
 		return err
 	}

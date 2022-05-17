@@ -1,10 +1,9 @@
 package handlers
 
 import (
+	tele "gopkg.in/telebot.v3"
 	"log"
 	"strings"
-
-	tele "gopkg.in/telebot.v3"
 )
 
 func callbacksSwitch(ctx tele.Context) error {
